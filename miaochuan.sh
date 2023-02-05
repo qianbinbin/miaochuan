@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-HEAD_SIZE=$((256 * 1024))
-
 error() {
   echo "$@" >&2
 }
@@ -41,13 +39,7 @@ mc() {
 
   size=$(wc -c "$file" | awk '{ print $1 }')
 
-  if [ "$size" -lt $HEAD_SIZE ]; then
-    error "miaochuan: $file: Size must be >= 256 KiB"
-    return 1
-  fi
-
   result=$(do_md5 <"$file")
-  result="$result#$(head -c $HEAD_SIZE "$file" | do_md5)"
   result="$result#$size"
   result="$result#$(basename "$file")"
 
