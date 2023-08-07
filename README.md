@@ -1,6 +1,6 @@
 ## miaochuan
 
-本地生成百度网盘秒传代码，配合 [秒传链接提取](https://greasyfork.org/scripts/424574) 使用。
+本地生成百度网盘秒传代码，配合 ~~[秒传链接提取（已失效）](https://greasyfork.org/scripts/424574)~~ [百度网盘秒传转存助手](https://greasyfork.org/scripts/468633) 使用。
 
 支持 Linux/Unix/macOS。
 
