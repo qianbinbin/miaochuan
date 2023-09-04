@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 
-unset KEEP_PATH CD
+HEAD_SIZE=$((256 * 1024))
+
+unset KEEP_PATH CD SHORT
 
 error() { echo "$@" >&2; }
 
@@ -17,6 +19,7 @@ Usage: miaochuan [OPTION]... FILE...
 
   -k    keep relative path(s)
   -c    change to directory DIR
+  -s    print short miaochuan code
   -h    display this help and exit
 
 Home page: <https://github.com/qianbinbin/miaochuan>
@@ -28,10 +31,11 @@ _exit() {
   exit 2
 }
 
-while getopts "khc:" c; do
+while getopts "khsc:" c; do
   case $c in
   k) KEEP_PATH=true ;;
   c) CD=$OPTARG ;;
+  s) SHORT=true ;;
   h) error "$USAGE" && exit ;;
   *) _exit ;;
   esac
@@ -66,7 +70,15 @@ mc() {
 
   size=$(wc -c "$f" | awk '{ print $1 }')
 
+  if [ "$SHORT" != true ] && [ "$size" -lt $HEAD_SIZE ]; then
+    error "miaochuan: $file: Size must be >= 256 KiB"
+    return 1
+  fi
+
   result=$(do_md5 <"$f")
+  if [ "$SHORT" != true ]; then
+    result="$result#$(head -c $HEAD_SIZE "$file" | do_md5)"
+  fi
   result="$result#$size"
   if [ "$KEEP_PATH" = true ]; then
     _f="$f"
