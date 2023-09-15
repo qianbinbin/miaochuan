@@ -10,8 +10,8 @@ error() { echo "$@" >&2; }
 
 exist() { command -v "$1" >/dev/null 2>&1; }
 
-if ! exist md5sum && ! exist md5; then
-  error "$SCRIPT: md5sum/md5 not found"
+if ! exist md5sum && ! exist md5 && ! exist openssl; then
+  error "$SCRIPT: No program to compute MD5 checksums. You may want to install md5, md5sum or openssl."
   exit 127
 fi
 
@@ -53,10 +53,12 @@ shift $((OPTIND - 1))
 [ $# -eq 0 ] && _exit
 
 do_md5() {
-  if exist md5sum; then
-    md5sum | awk '{ print $1 }'
-  elif exist md5; then
+  if exist md5; then
     md5
+  elif exist md5sum; then
+    md5sum | awk '{ print $1 }'
+  elif exist openssl; then
+    openssl md5 | awk '{ print $2 }'
   else
     error "$SCRIPT: Van!shment  Th!s World!!"
     exit 127
