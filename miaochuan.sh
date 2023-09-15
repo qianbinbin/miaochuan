@@ -4,23 +4,26 @@ HEAD_SIZE=$((256 * 1024))
 
 unset KEEP_PATH CD SHORT
 
+SCRIPT=$(basename "$0")
+
 error() { echo "$@" >&2; }
 
 exist() { command -v "$1" >/dev/null 2>&1; }
 
 if ! exist md5sum && ! exist md5; then
-  error "miaochuan: md5sum/md5 not found"
+  error "$SCRIPT: md5sum/md5 not found"
   exit 127
 fi
 
 USAGE=$(
   cat <<-END
-Usage: miaochuan [OPTION]... FILE...
+Usage: $SCRIPT [<options>] <path>...
+Print miaochuan code of file(s).
 
-  -k    keep relative path(s)
-  -c    change to directory DIR
-  -s    print short miaochuan code
-  -h    display this help and exit
+  -k            keep relative path(s)
+  -c <dir>      change the directory before printing
+  -s            print short miaochuan code
+  -h            display this help and exit
 
 Home page: <https://github.com/qianbinbin/miaochuan>
 END
@@ -55,7 +58,7 @@ do_md5() {
   elif exist md5; then
     md5
   else
-    error "miaochuan: Van!shment  Th!s World!!"
+    error "$SCRIPT: Van!shment  Th!s World!!"
     exit 127
   fi
 }
@@ -64,14 +67,14 @@ mc() {
   f=$(realpath --relative-to "$PWD" "$1")
 
   if [ ! -f "$f" ] || [ ! -r "$f" ]; then
-    error "miaochuan: $f: Cannot access"
+    error "$SCRIPT: $f: Cannot access"
     return 1
   fi
 
   size=$(wc -c "$f" | awk '{ print $1 }')
 
   if [ "$SHORT" != true ] && [ "$size" -lt $HEAD_SIZE ]; then
-    error "miaochuan: $file: Size must be >= 256 KiB"
+    error "$SCRIPT: $file: Size must be >= 256 KiB"
     return 1
   fi
 

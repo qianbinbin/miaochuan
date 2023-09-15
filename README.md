@@ -25,12 +25,13 @@ aba7e22636c435c5008f5d059ae69a62#9473c90c734bd4406f4f8d452b9fd759#1215168512#ubu
 
 ```sh
 $ miaochuan.sh -h
-Usage: miaochuan [OPTION]... FILE...
+Usage: miaochuan.sh [<options>] <path>...
+Print miaochuan code of file(s).
 
-  -k    keep relative path(s)
-  -c    change to directory DIR
-  -s    print short miaochuan code
-  -h    display this help and exit
+  -k            keep relative path(s)
+  -c <dir>      change the directory before printing
+  -s            print short miaochuan code
+  -h            display this help and exit
 
 Home page: <https://github.com/qianbinbin/miaochuan>
 ```
