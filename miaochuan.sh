@@ -75,11 +75,6 @@ mc() {
 
   size=$(wc -c "$f" | awk '{ print $1 }')
 
-  if [ "$SHORT" != true ] && [ "$size" -lt $HEAD_SIZE ]; then
-    error "$SCRIPT: $file: Size must be >= 256 KiB"
-    return 1
-  fi
-
   result=$(do_md5 <"$f")
   if [ "$SHORT" != true ]; then
     result="$result#$(head -c $HEAD_SIZE "$file" | do_md5)"
